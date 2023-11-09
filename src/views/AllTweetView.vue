@@ -4,7 +4,7 @@
 			<AllTweet
 				v-for="tweet in tweetsData"
 				:key="tweet.id"
-				:id="tweet.id"
+				:id="tweet.user_id"
 				:username="tweet.username"
 				:content="tweet.content"
 				:likes="tweet.likes"
@@ -18,7 +18,6 @@
 import AllTweet from '@/components/AllTweet.vue';
 
 export default {
-	name: 'AllTweetView',
 	components: {
 		AllTweet,
 	},
@@ -33,7 +32,7 @@ export default {
 	methods: {
 		async getAllTweet() {
 			const response = await this.$store.dispatch('getAllTweet');
-			this.tweetsData = response.data;
+			this.tweetsData = response;
 		},
 	},
 };

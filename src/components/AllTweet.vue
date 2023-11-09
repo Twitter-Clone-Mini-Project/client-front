@@ -36,7 +36,6 @@
 import { format } from 'date-fns';
 
 export default {
-	name: 'AllTweet',
 	props: {
 		id: Number,
 		username: String,
@@ -56,8 +55,11 @@ export default {
 				return 'Just now';
 			} else if (hoursAgo === 1) {
 				return '1h ago';
-			} else {
+			} else if (hoursAgo < 24) {
 				return hoursAgo + 'h ago';
+			} else {
+				const daysAgo = Math.floor(hoursAgo / 24);
+				return daysAgo + 'd ago';
 			}
 		},
 

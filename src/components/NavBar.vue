@@ -18,10 +18,10 @@
 				/>
 			</div>
 			<div class="login">
-				<a
-					href="#"
+				<router-link
+					to="/login"
 					class="bg-blue-500 px-6 py-3 text-white rounded hover:bg-blue-400"
-					>Login</a
+					>Login</router-link
 				>
 			</div>
 		</div>
@@ -46,9 +46,3 @@
 		</div>
 	</nav>
 </template>
-
-<script>
-export default {
-	name: 'NavBar',
-};
-</script>

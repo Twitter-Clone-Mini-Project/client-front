@@ -2,6 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import MyTweetView from '../views/MyTweetView.vue';
 import AllTweetView from '../views/AllTweetView.vue';
+import LoginView from '../views/LoginView.vue';
+import SignupView from '../views/SignupView.vue';
 
 // TODO: Uncomment baris kode dibawah ini untuk meng-import Halaman Hello ke dalam router
 
@@ -24,6 +26,17 @@ const routes = [
 		path: '/alltweet',
 		name: 'alltweet',
 		component: AllTweetView,
+	},
+
+	{
+		path: '/login',
+		name: 'login',
+		component: LoginView,
+	},
+	{
+		path: '/signup',
+		name: 'signup',
+		component: SignupView,
 	},
 ];
 

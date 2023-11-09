@@ -18,7 +18,6 @@
 import AllTweet from '@/components/AllTweet.vue';
 
 export default {
-	name: 'AllTweetView',
 	components: {
 		AllTweet,
 	},

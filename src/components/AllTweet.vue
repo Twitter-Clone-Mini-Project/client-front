@@ -36,7 +36,6 @@
 import { format } from 'date-fns';
 
 export default {
-	name: 'AllTweet',
 	props: {
 		id: Number,
 		username: String,

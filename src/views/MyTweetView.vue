@@ -11,7 +11,6 @@
 import MyTweet from '@/components/MyTweet.vue';
 
 export default {
-	name: 'MyTweetView',
 	components: {
 		MyTweet,
 	},

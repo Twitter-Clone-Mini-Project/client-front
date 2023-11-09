@@ -5,9 +5,3 @@
 		<p>(Nantikan fitur login di level 2)</p>
 	</div>
 </template>
-
-<script>
-export default {
-	name: 'MyTweet',
-};
-</script>

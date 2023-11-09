@@ -1,0 +1,70 @@
+<template>
+	<div class="rounded p-5 my-2 border border-inherit">
+		<div class="flex gap-5 pb-5">
+			<img
+				:src="`https://source.unsplash.com/random/200x200?sig=${id}`"
+				alt=""
+				class="rounded-full w-14 h-14"
+			/>
+			<div class="w-full">
+				<div class="flex justify-between w-full">
+					<p>
+						<span class="font-black">{{ username }}</span>
+						<span class="text-gray-400">@{{ username }}{{ id }}</span>
+					</p>
+					<span class="text-gray-500">{{ formatTimeAgo(created_at) }}</span>
+				</div>
+				<p>{{ content }}</p>
+			</div>
+		</div>
+		<div class="flex justify-between">
+			<p class="text-gray-500">{{ formatCreatedAt(created_at) }}</p>
+			<div class="action flex justify-end gap-5">
+				<a href="#" class="hover:text-gray-500">
+					<font-awesome-icon icon="far fa-comment" /> Comment (0)</a
+				>
+				<a href="#" class="hover:text-gray-500"
+					><font-awesome-icon icon="far fa-heart" /> Love ({{ likes }})
+				</a>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script>
+// NOTE: date-fns ini untuk menggunakan fungsi format tanggal agar seperti (10 November 2023)
+import { format } from 'date-fns';
+
+export default {
+	name: 'AllTweet',
+	props: {
+		id: Number,
+		username: String,
+		content: String,
+		likes: Number,
+		created_at: Date,
+	},
+	methods: {
+		// TODO: Buat codingan mengenai fungsi waktu time ago post
+		formatTimeAgo(dateTime) {
+			const createdDate = new Date(dateTime);
+			const currentDate = new Date();
+			const timeDifference = currentDate - createdDate;
+			const hoursAgo = Math.floor(timeDifference / (1000 * 60 * 60));
+
+			if (hoursAgo === 0) {
+				return 'Just now';
+			} else if (hoursAgo === 1) {
+				return '1h ago';
+			} else {
+				return hoursAgo + 'h ago';
+			}
+		},
+
+		// TODO: Buat fungsi format dari created_at menjadi (dd MMMM yyyy)
+		formatCreatedAt(dateTime) {
+			return format(new Date(dateTime), 'dd MMMM yyyy');
+		},
+	},
+};
+</script>

@@ -4,7 +4,7 @@
 			<AllTweet
 				v-for="tweet in tweetsData"
 				:key="tweet.id"
-				:id="tweet.id"
+				:id="tweet.user_id"
 				:username="tweet.username"
 				:content="tweet.content"
 				:likes="tweet.likes"
@@ -27,13 +27,13 @@ export default {
 			tweetsData: [],
 		};
 	},
-	mounted() {
-		this.getAllTweet();
+	async mounted() {
+		await this.getAllTweet();
 	},
 	methods: {
 		async getAllTweet() {
 			const response = await this.$store.dispatch('getAllTweet');
-			this.tweetsData = response.data;
+			this.tweetsData = response;
 		},
 	},
 };

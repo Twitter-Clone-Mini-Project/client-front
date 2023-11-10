@@ -1,6 +1,7 @@
 <template>
 	<div id="app">
-		<NavBar />
+		<!-- aku mau NavBar ini munculnya ketika bukan url : / -->
+		<NavBar v-if="isNotHomeRoute" />
 		<router-view />
 	</div>
 </template>
@@ -11,6 +12,11 @@ import NavBar from '@/components/NavBar.vue';
 export default {
 	components: {
 		NavBar,
+	},
+	computed: {
+		isNotHomeRoute() {
+			return this.$route.path !== '/';
+		},
 	},
 };
 </script>

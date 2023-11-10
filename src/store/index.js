@@ -7,9 +7,22 @@ Vue.use(Vuex);
 // const BASE_URL = 'http://localhost:8080';
 
 export default new Vuex.Store({
-	state: {},
-	getters: {},
-	mutations: {},
+	state: {
+		isLoggedIn: false,
+		users: [],
+	},
+	getters: {
+		currentUser: (state) =>
+			state.users.find((user) => user.id === state.currentUserId),
+	},
+	mutations: {
+		setIsLoggedIn(state, status) {
+			state.isLoggedIn = status;
+		},
+		addUser(state, user) {
+			state.users.push(user); // Mutasi untuk menambahkan pengguna baru
+		},
+	},
 	actions: {
 		async getAllTweet() {
 			// return await axios.get(`${BASE_URL}/tweets`).catch((error) => {

@@ -41,7 +41,7 @@ export default {
 		username: String,
 		content: String,
 		likes: Number,
-		created_at: Date,
+		created_at: String,
 	},
 	methods: {
 		// TODO: Buat codingan mengenai fungsi waktu time ago post

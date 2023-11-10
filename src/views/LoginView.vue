@@ -53,24 +53,28 @@ export default {
 		login(event) {
 			event.preventDefault(); // Mencegah pengiriman formulir
 
-			const user = this.$store.state.users.find(
-				(u) => u.username === this.username
-			);
+			if (this.user || this.password) {
+				const user = this.$store.state.users.find(
+					(u) => u.username === this.username
+				);
 
-			if (user) {
-				if (user.password === this.password) {
+				if (user) {
+					if (user.password === this.password) {
+						this.$store.commit('setIsLoggedIn', true);
+						this.$router.push('/mytweet');
+					} else {
+						alert('Password is incorrect.');
+					}
+				} else {
+					this.$store.commit('addUser', {
+						username: this.username,
+						password: this.password,
+					});
 					this.$store.commit('setIsLoggedIn', true);
 					this.$router.push('/mytweet');
-				} else {
-					alert('Password is incorrect.');
 				}
 			} else {
-				this.$store.commit('addUser', {
-					username: this.username,
-					password: this.password,
-				});
-				this.$store.commit('setIsLoggedIn', true);
-				this.$router.push('/mytweet');
+				alert('Required username and password.');
 			}
 		},
 	},

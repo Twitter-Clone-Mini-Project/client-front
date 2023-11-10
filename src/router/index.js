@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import HomeView from '../views/HomeView.vue';
 import MyTweetView from '../views/MyTweetView.vue';
 import AllTweetView from '../views/AllTweetView.vue';
 
@@ -11,7 +12,7 @@ const routes = [
 	{
 		path: '/',
 		name: 'home',
-		component: MyTweetView,
+		component: HomeView,
 	},
 
 	// TODO: Uncomment baris kode dibawah ini untuk menambahkan routing baru ke Halaman Hello

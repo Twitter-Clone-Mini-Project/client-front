@@ -3,14 +3,16 @@
 		<div class="flex gap-5 pb-5">
 			<img
 				:src="`https://source.unsplash.com/random/200x200?sig=${id}`"
-				alt=""
+				alt="profile"
 				class="rounded-full w-14 h-14"
 			/>
 			<div class="w-full">
 				<div class="flex justify-between w-full">
 					<p>
 						<span class="font-black">{{ username }}</span>
-						<span class="text-gray-400">@{{ username }}{{ id }}</span>
+						<span class="text-gray-400"
+							>@{{ username.replace(/\s/g, '') }}{{ id }}</span
+						>
 					</p>
 					<span class="text-gray-500">{{ formatTimeAgo(created_at) }}</span>
 				</div>

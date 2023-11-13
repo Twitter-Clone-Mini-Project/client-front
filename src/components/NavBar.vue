@@ -83,6 +83,8 @@ export default {
 		logout() {
 			// Lakukan proses logout di sini
 			this.$store.commit('setIsLoggedIn', false);
+			this.$store.commit('setCurrentUsername', '');
+			this.$store.commit('setCurrentId', '');
 			// Redirect ke halaman login atau halaman lain yang sesuai
 			this.$router.push('/login');
 		},

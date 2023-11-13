@@ -1,7 +1,11 @@
 <template>
 	<div class="flex justify-center bg-white h-screen px-5">
 		<div class="content px-5 py-5 bg-white h-full overflow-y-auto">
-			<MyTweet :isLoggedIn="isLoggedIn" />
+			<MyTweet
+				:isLoggedIn="isLoggedIn"
+				:id="currentId"
+				:username="currentUsername"
+			/>
 		</div>
 	</div>
 </template>
@@ -14,6 +18,12 @@ export default {
 	computed: {
 		isLoggedIn() {
 			return this.$store.state.isLoggedIn;
+		},
+		currentId() {
+			return this.$store.state.currentId;
+		},
+		currentUsername() {
+			return this.$store.state.currentUsername;
 		},
 	},
 	components: {

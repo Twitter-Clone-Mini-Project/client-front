@@ -32,7 +32,7 @@ export default {
 	methods: {
 		async getAllTweet() {
 			const response = await this.$store.dispatch('getAllTweet');
-			this.tweetsData = response;
+			this.tweetsData = response.data;
 		},
 	},
 };

@@ -2,7 +2,14 @@
 	<div class="rounded p-5 my-2 border border-inherit">
 		<div class="flex gap-5 pb-5">
 			<img
-				:src="`https://source.unsplash.com/random/200x200?sig=${id}`"
+				v-if="currentId !== userId"
+				:src="`https://source.unsplash.com/random/200x200?sig=${userId}`"
+				alt="profile"
+				class="rounded-full w-14 h-14"
+			/>
+			<img
+				v-else
+				src="@/assets/devcode-logo.png"
 				alt="profile"
 				class="rounded-full w-14 h-14"
 			/>
@@ -11,7 +18,7 @@
 					<p>
 						<span class="font-black">{{ username }}</span>
 						<span class="text-gray-400"
-							>@{{ username.replace(/\s/g, '') }}{{ id }}</span
+							>@{{ username.replace(/\s/g, '') }}{{ userId }}</span
 						>
 					</p>
 					<span class="text-gray-500">{{ formatTimeAgo(created_at) }}</span>
@@ -39,7 +46,8 @@ import { format } from 'date-fns';
 
 export default {
 	props: {
-		id: Number,
+		currentId: Number,
+		userId: Number,
 		username: String,
 		content: String,
 		likes: Number,

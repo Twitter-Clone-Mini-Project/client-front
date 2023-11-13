@@ -4,7 +4,6 @@ import MyTweetView from '../views/MyTweetView.vue';
 import AllTweetView from '../views/AllTweetView.vue';
 import LoginView from '../views/LoginView.vue';
 import HomeView from '../views/HomeView.vue';
-import store from '../store';
 // TODO: Uncomment baris kode dibawah ini untuk meng-import Halaman Hello ke dalam router
 
 Vue.use(VueRouter);
@@ -32,18 +31,13 @@ const routes = [
 		name: 'login',
 		component: LoginView,
 		beforeEnter: (to, from, next) => {
-			if (store.state.isLoggedIn) {
-				next('/');
+			if (localStorage.getItem('isLoggedIn') === 'true') {
+				next('/mytweet');
 			} else {
 				next();
 			}
 		},
 	},
-	// {
-	// 	path: '/signup',
-	// 	name: 'signup',
-	// 	component: SignupView,
-	// },
 ];
 
 const router = new VueRouter({

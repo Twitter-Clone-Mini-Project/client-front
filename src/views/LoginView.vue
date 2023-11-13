@@ -32,9 +32,9 @@
 				<button
 					type="submit"
 					class="bg-black text-white w-full rounded my-3 py-2 disabled:opacity-50"
-					:disabled="username.length <= 3 || password.length <= 3"
+					:disabled="username.length <= 3 || password.length <= 3 || loading"
 				>
-					Sign in
+					{{ loading ? 'Loading...' : 'Sign in' }}
 				</button>
 			</form>
 			<p class="read-the-docs">
@@ -53,22 +53,29 @@ export default {
 			password: '',
 			loginFailed: false,
 			loginErrorMessage: '',
+			loading: false,
 		};
 	},
 	methods: {
 		async login(event) {
 			event.preventDefault();
-			const credentials = {
+			this.loading = true; // Set loading state
+			const data = {
 				username: this.username,
 				password: this.password,
 			};
-			const request = await this.$store.dispatch('login', credentials);
-
-			if (request.status === 200) {
-				this.$router.push('/mytweet');
-			} else if (request.response.status === 400) {
-				this.loginFailed = true;
-				this.loginErrorMessage = request.response.data.message;
+			try {
+				const request = await this.$store.dispatch('login', data);
+				if (request.status === 200) {
+					this.$router.push('/mytweet').then(() => {
+						window.location.reload();
+					});
+				} else if (request.response.status === 400) {
+					this.loginFailed = true;
+					this.loginErrorMessage = request.response.data.message;
+				}
+			} finally {
+				this.loading = false;
 			}
 		},
 	},

@@ -7,20 +7,16 @@ Vue.use(Vuex);
 const BASE_URL = 'https://gnqpdlmd-3030.asse.devtunnels.ms';
 
 export default new Vuex.Store({
-	state: {
-		isLoggedIn: false,
-		currentId: '',
-		currentUsername: '',
-	},
+	state: {},
 	mutations: {
 		setCurrentId(state, id) {
-			state.currentId = id;
+			localStorage.setItem('currentId', id);
 		},
 		setCurrentUsername(state, username) {
-			state.currentUsername = username;
+			localStorage.setItem('currentUsername', username);
 		},
 		setIsLoggedIn(state, status) {
-			state.isLoggedIn = status;
+			localStorage.setItem('isLoggedIn', status);
 		},
 	},
 	actions: {
@@ -29,12 +25,32 @@ export default new Vuex.Store({
 				return error;
 			});
 		},
-		async login({ commit }, credentials) {
+		async login({ commit }, data) {
 			try {
-				const response = await axios.post(`${BASE_URL}/sign`, credentials);
+				const response = await axios.post(`${BASE_URL}/sign`, data);
+				commit('setIsLoggedIn', true);
 				commit('setCurrentUsername', response.data.username);
 				commit('setCurrentId', response.data.id);
-				commit('setIsLoggedIn', true);
+				return response;
+			} catch (error) {
+				return error;
+			}
+		},
+		// eslint-disable-next-line no-unused-vars
+		async addMyTweet({ commit }, data) {
+			try {
+				const response = await axios.post(`${BASE_URL}/tweets/${data.id}`, {
+					content: data.content,
+				});
+				return response;
+			} catch (error) {
+				return error;
+			}
+		},
+		// eslint-disable-next-line no-unused-vars
+		async getMyTweet({ commit }, id) {
+			try {
+				const response = await axios.get(`${BASE_URL}/tweets/${id}`);
 				return response;
 			} catch (error) {
 				return error;

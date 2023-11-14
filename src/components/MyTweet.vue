@@ -14,7 +14,20 @@
 							>@{{ username.replace(/\s/g, '') }}{{ userId }}</span
 						>
 					</p>
-					<span class="text-gray-500">{{ formatTimeAgo(created_at) }}</span>
+					<div class="flex gap-3 justify-between">
+						<button
+							type="submit"
+							class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-400 disabled:opacity-50"
+						>
+							Edit
+						</button>
+						<button
+							type="submit"
+							class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-400 disabled:opacity-50"
+						>
+							Delete
+						</button>
+					</div>
 				</div>
 				<p>{{ content }}</p>
 			</div>

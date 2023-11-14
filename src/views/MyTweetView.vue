@@ -35,16 +35,7 @@ export default {
 	},
 	data() {
 		return {
-			tweetsData: [
-				{
-					id: 1,
-					user_id: 1,
-					username: 'jamjam',
-					content: 'bangun pagi bisa buat kamu semangat',
-					likes: 2,
-					created_at: '10-11-2021',
-				},
-			],
+			tweetsData: [],
 		};
 	},
 	mounted() {

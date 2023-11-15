@@ -16,20 +16,50 @@
 					</p>
 					<div class="flex gap-3 justify-between">
 						<button
-							type="submit"
-							class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-400 disabled:opacity-50"
+							:disabled="tweet.trim() === '' || loading"
+							v-if="editMode"
+							@click="updateMyTweet"
+							class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400 disabled:opacity-75"
 						>
-							Edit
+							{{ loading ? 'Loading...' : 'Save' }}
 						</button>
 						<button
-							type="submit"
-							class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-400 disabled:opacity-50"
+							@click="toggleEditMode"
+							:class="{
+								'text-white px-4 py-2 rounded hover:opacity-75': true,
+								'bg-green-500': !editMode,
+								'bg-red-500': editMode,
+							}"
+						>
+							{{ editMode ? 'Cancel' : 'Edit' }}
+						</button>
+						<button
+							v-if="!editMode"
+							@click="deleteMyTweet"
+							class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-400"
 						>
 							Delete
 						</button>
 					</div>
 				</div>
-				<p>{{ content }}</p>
+				<p v-if="!editMode">{{ content }}</p>
+				<form v-if="editMode" @submit="updateMyTweet">
+					<textarea
+						v-model="tweet"
+						class="w-full mt-2 p-2 border border-gray-300 rounded-md resize-none block"
+						placeholder="What's happening?"
+						rows="3"
+						cols="100"
+					></textarea>
+					<div class="flex justify-end items-center mt-2">
+						<span
+							:class="{ 'text-red-500': tweet.length > 280 }"
+							class="text-gray-500"
+						>
+							{{ remainingCharacters }} characters remaining
+						</span>
+					</div>
+				</form>
 			</div>
 		</div>
 		<div class="flex justify-between">
@@ -59,6 +89,13 @@ export default {
 		likes: Number,
 		created_at: String,
 	},
+	data() {
+		return {
+			editMode: false,
+			tweet: '',
+			loading: false,
+		};
+	},
 	methods: {
 		// TODO: Buat codingan mengenai fungsi waktu time ago post
 		formatTimeAgo(dateTime) {
@@ -82,6 +119,50 @@ export default {
 		// TODO: Buat fungsi format dari created_at menjadi (dd MMMM yyyy)
 		formatCreatedAt(dateTime) {
 			return format(new Date(dateTime), 'dd MMMM yyyy');
+		},
+
+		async deleteMyTweet() {
+			const confirmation = confirm(
+				'Are you sure you want to delete this tweet?'
+			);
+			if (confirmation) {
+				const data = {
+					id: this.id,
+					userId: this.userId,
+				};
+				await this.$store.dispatch('deleteMyTweet', data);
+				this.$parent.getMyTweet();
+			}
+		},
+
+		toggleEditMode() {
+			this.editMode = !this.editMode;
+			if (this.editMode) {
+				this.tweet = this.content;
+			}
+		},
+
+		async updateMyTweet(event) {
+			event.preventDefault();
+			this.loading = true; // Set loading state
+			const data = {
+				id: this.id,
+				userId: this.userId,
+				content: this.tweet,
+			};
+			try {
+				await this.$store.dispatch('updateMyTweet', data);
+			} finally {
+				this.loading = false;
+				this.toggleEditMode();
+				this.$parent.getMyTweet();
+			}
+		},
+	},
+	computed: {
+		remainingCharacters() {
+			const remaining = 280 - this.tweet.length;
+			return remaining < 0 ? 0 : remaining;
 		},
 	},
 };

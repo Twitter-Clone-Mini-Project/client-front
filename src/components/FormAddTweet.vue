@@ -68,8 +68,12 @@ export default {
 				await this.$store.dispatch('addMyTweet', data);
 			} finally {
 				this.loading = false;
-				window.location.reload();
+				this.resetInputValue();
+				this.$parent.getMyTweet();
 			}
+		},
+		resetInputValue() {
+			this.tweet = '';
 		},
 	},
 	computed: {

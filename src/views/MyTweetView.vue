@@ -8,7 +8,7 @@
 			<MyTweet
 				v-for="tweet in sortedTweets"
 				:key="tweet.id"
-				:id="tweet.user_id"
+				:id="tweet.id"
 				:userId="tweet.user_id"
 				:username="tweet.username"
 				:content="tweet.content"

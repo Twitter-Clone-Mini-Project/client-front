@@ -99,13 +99,6 @@ export default {
 			loading: false,
 		};
 	},
-	data() {
-		return {
-			editMode: false,
-			tweet: '',
-			loading: false,
-		};
-	},
 	methods: {
 		// TODO: Buat codingan mengenai fungsi waktu time ago post
 		formatTimeAgo(dateTime) {

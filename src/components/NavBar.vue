@@ -10,7 +10,6 @@
 					width="50"
 					height="50"
 				/>
-				<!-- <p v-if="isLoggedIn" class="text-lg">{{ currentUser.username }}</p> -->
 				<img
 					v-else
 					src="@/assets/deffault.png"
@@ -40,7 +39,7 @@
 					v-else
 					to="/login"
 					class="bg-blue-500 px-5 py-3 text-white rounded hover:bg-blue-400"
-					>Login
+					>Log in
 				</router-link>
 			</div>
 		</div>
@@ -70,7 +69,6 @@
 export default {
 	props: {
 		isLoggedIn: Boolean,
-		currentUsername: String,
 	},
 	methods: {
 		logout() {

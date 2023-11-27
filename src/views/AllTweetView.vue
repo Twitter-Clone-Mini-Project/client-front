@@ -1,6 +1,6 @@
 <template>
 	<div class="flex justify-center bg-white h-screen px-5">
-		<div class="content px-5 py-5 bg-white h-full overflow-y-auto">
+		<div class="w-full lg:w-[55%] px-5 py-5 bg-white h-full overflow-y-auto">
 			<AllTweet
 				v-for="tweet in sortedTweets"
 				:key="tweet.id"
@@ -9,7 +9,7 @@
 				:username="tweet.username"
 				:content="tweet.content"
 				:likes="tweet.likes"
-				:created_at="tweet.created_at"
+				:createdAt="tweet.created_at"
 			/>
 		</div>
 	</div>
@@ -20,8 +20,8 @@ import AllTweet from '@/components/AllTweet.vue';
 
 export default {
 	props: {
-	currentId:Number
-},
+		currentId: Number,
+	},
 	components: {
 		AllTweet,
 	},
@@ -37,7 +37,7 @@ export default {
 				.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 		},
 	},
-	mounted() {
+	beforeMount() {
 		this.getAllTweet();
 	},
 	methods: {
@@ -48,9 +48,3 @@ export default {
 	},
 };
 </script>
-
-<style>
-.content {
-	max-width: 920px;
-}
-</style>

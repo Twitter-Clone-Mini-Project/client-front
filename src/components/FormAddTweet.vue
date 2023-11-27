@@ -1,5 +1,5 @@
 <template>
-	<div class="rounded px-5 py-3 my-2 border border-inherit">
+	<div class="rounded p-5 my-2 border border-inherit">
 		<div class="flex gap-5">
 			<img
 				src="@/assets/devcode-logo.png"
@@ -68,8 +68,12 @@ export default {
 				await this.$store.dispatch('addMyTweet', data);
 			} finally {
 				this.loading = false;
-				window.location.reload();
+				this.resetInputValue();
+				this.$parent.getMyTweet();
 			}
+		},
+		resetInputValue() {
+			this.tweet = '';
 		},
 	},
 	computed: {

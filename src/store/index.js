@@ -36,8 +36,8 @@ export default new Vuex.Store({
 				return error;
 			}
 		},
-		// eslint-disable-next-line no-unused-vars
-		async addMyTweet({ commit }, data) {
+
+		async addMyTweet(context, data) {
 			try {
 				const response = await axios.post(`${BASE_URL}/tweets/${data.id}`, {
 					content: data.content,
@@ -47,10 +47,34 @@ export default new Vuex.Store({
 				return error;
 			}
 		},
-		// eslint-disable-next-line no-unused-vars
-		async getMyTweet({ commit }, id) {
+
+		async getMyTweet(context, id) {
 			try {
 				const response = await axios.get(`${BASE_URL}/tweets/${id}`);
+				return response;
+			} catch (error) {
+				return error;
+			}
+		},
+
+		async deleteMyTweet(context, data) {
+			try {
+				const response = await axios.delete(
+					`${BASE_URL}/tweets/${data.userId}/${data.id}`
+				);
+				return response;
+			} catch (error) {
+				return error;
+			}
+		},
+		async updateMyTweet(context, data) {
+			try {
+				const response = await axios.put(
+					`${BASE_URL}/tweets/${data.userId}/${data.id}`,
+					{
+						content: data.content,
+					}
+				);
 				return response;
 			} catch (error) {
 				return error;

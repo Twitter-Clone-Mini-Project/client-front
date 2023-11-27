@@ -1,26 +1,19 @@
 <template>
-	<div class="rounded p-5 my-2 border border-inherit">
+	<div class="rounded p-5 my-2 border border-inherit w-full">
 		<div class="flex gap-5 pb-5">
 			<img
-				v-if="currentId !== userId"
-				:src="`https://source.unsplash.com/random/200x200?sig=${userId}`"
-				alt="profile"
-				class="rounded-full w-14 h-14"
-			/>
-			<img
-				v-else
 				src="@/assets/devcode-logo.png"
 				alt="profile"
 				class="rounded-full w-14 h-14"
 			/>
 			<div class="w-full">
-				<div class="flex justify-between w-full">
-					<p>
-						<span class="font-black">{{ username }}</span>
-						<span class="text-gray-400"
-							>@{{ username.replace(/\s/g, '') }}{{ userId }}</span
-						>
-					</p>
+				<div class="flex justify-between items-center">
+					<div>
+						<p class="font-black">{{ username }}</p>
+						<p class="text-gray-400">
+							@{{ username.replace(/\s/g, '') }}{{ userId }}
+						</p>
+					</div>
 					<span class="text-gray-500">{{ formatTimeAgo(createdAt) }}</span>
 				</div>
 				<p>{{ content }}</p>
@@ -28,12 +21,9 @@
 		</div>
 		<div class="flex justify-between">
 			<p class="text-gray-500">{{ formatCreatedAt(createdAt) }}</p>
-			<div class="action flex justify-end gap-5">
+			<div class="action flex justify-end">
 				<a href="#" class="hover:text-gray-500">
-					<font-awesome-icon icon="far fa-comment" /> Comment (0)</a
-				>
-				<a href="#" class="hover:text-gray-500"
-					><font-awesome-icon icon="far fa-heart" /> Love ({{ likes }})
+					<font-awesome-icon icon="far fa-heart" /> Love ({{ likes }})
 				</a>
 			</div>
 		</div>
@@ -46,12 +36,19 @@ import { format } from 'date-fns';
 
 export default {
 	props: {
-		currentId: Number,
+		id: Number,
 		userId: Number,
 		username: String,
 		content: String,
 		likes: Number,
 		createdAt: String,
+	},
+	data() {
+		return {
+			editMode: false,
+			tweet: '',
+			loading: false,
+		};
 	},
 	methods: {
 		// TODO: Buat codingan mengenai fungsi waktu time ago post
@@ -76,6 +73,50 @@ export default {
 		// TODO: Buat fungsi format dari createdAt menjadi (dd MMMM yyyy)
 		formatCreatedAt(dateTime) {
 			return format(new Date(dateTime), 'dd MMMM yyyy');
+		},
+
+		async deleteMyTweet() {
+			const confirmation = confirm(
+				'Are you sure you want to delete this tweet?'
+			);
+			if (confirmation) {
+				const data = {
+					id: this.id,
+					userId: this.userId,
+				};
+				await this.$store.dispatch('deleteMyTweet', data);
+				this.$parent.getMyTweet();
+			}
+		},
+
+		toggleEditMode() {
+			this.editMode = !this.editMode;
+			if (this.editMode) {
+				this.tweet = this.content;
+			}
+		},
+
+		async updateMyTweet(event) {
+			event.preventDefault();
+			this.loading = true; // Set loading state
+			const data = {
+				id: this.id,
+				userId: this.userId,
+				content: this.tweet,
+			};
+			try {
+				await this.$store.dispatch('updateMyTweet', data);
+			} finally {
+				this.loading = false;
+				this.toggleEditMode();
+				this.$parent.getMyTweet();
+			}
+		},
+	},
+	computed: {
+		remainingCharacters() {
+			const remaining = 280 - this.tweet.length;
+			return remaining < 0 ? 0 : remaining;
 		},
 	},
 };

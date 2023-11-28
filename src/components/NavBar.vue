@@ -68,23 +68,16 @@
 
 <script>
 export default {
-	computed: {
-		isLoggedIn() {
-			return this.$store.state.isLoggedIn;
-		},
-		currentUser() {
-			const currentUserId = this.$store.state.currentUserId;
-			return (
-				this.$store.state.users.find((user) => user.id === currentUserId) || {}
-			);
-		},
+	props: {
+		isLoggedIn: Boolean,
+		currentUsername: String,
 	},
 	methods: {
 		logout() {
-			// Lakukan proses logout di sini
-			this.$store.commit('setIsLoggedIn', false);
-			// Redirect ke halaman login atau halaman lain yang sesuai
-			this.$router.push('/login');
+			localStorage.clear();
+			this.$router.push('/login').then(() => {
+				window.location.reload();
+			});
 		},
 	},
 };

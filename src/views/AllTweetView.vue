@@ -1,45 +1,13 @@
 <template>
 	<div class="flex justify-center bg-white h-screen px-5">
 		<div class="content px-5 py-5 bg-white h-full overflow-y-auto">
-			<AllTweet
-				v-for="tweet in tweetsData"
-				:key="tweet.id"
-				:id="tweet.user_id"
-				:username="tweet.username"
-				:content="tweet.content"
-				:likes="tweet.likes"
-				:created_at="tweet.created_at"
-			/>
+			<div class="rounded p-5 my-2 border border-inherit text-center">
+				<!-- TODO: Uncomment baris kode dibawah untuk menampilkan informasi bahwa anda belum login -->
+				<h1 class="text-2xl">Anda belum bisa menampilkan seluruh tweet.</h1>
+				<p>Nantikan fitur menampilkan seluruh tweet di level 2</p>
+			</div>
 		</div>
 	</div>
 </template>
 
-<script>
-import AllTweet from '@/components/AllTweet.vue';
-
-export default {
-	components: {
-		AllTweet,
-	},
-	data() {
-		return {
-			tweetsData: [],
-		};
-	},
-	async mounted() {
-		await this.getAllTweet();
-	},
-	methods: {
-		async getAllTweet() {
-			const response = await this.$store.dispatch('getAllTweet');
-			this.tweetsData = response;
-		},
-	},
-};
-</script>
-
-<style>
-.content {
-	max-width: 920px;
-}
-</style>
+<script></script>

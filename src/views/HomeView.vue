@@ -17,7 +17,7 @@
 		<h1 class="text-4xl font-bold mb-4">Selamat datang di sesi Marathon</h1>
 		<p class="text-gray-600 mb-8">Mulai challengenya sekarang!</p>
 		<router-link
-			to="/mytweet"
+			to="/login"
 			class="bg-blue-500 text-white px-8 py-3 rounded-full hover:bg-blue-400 transition duration-300"
 		>
 			Mulai Challenge

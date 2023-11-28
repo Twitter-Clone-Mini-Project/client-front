@@ -9,14 +9,9 @@ const BASE_URL = 'https://gnqpdlmd-3030.asse.devtunnels.ms';
 export default new Vuex.Store({
 	state: {},
 	getters: {},
-	mutations: {
-		setJwt(state, jwt) {
-			localStorage.setItem('jwt', jwt);
-		},
-	},
+	mutations: {},
 	actions: {
-		// eslint-disable-next-line no-unused-vars
-		async signup({ commit }, data) {
+		async signup(context, data) {
 			try {
 				const response = await axios.post(`${BASE_URL}/users`, data);
 				return response;
@@ -24,10 +19,17 @@ export default new Vuex.Store({
 				return error;
 			}
 		},
-		// eslint-disable-next-line no-unused-vars
-		async login({ commit }, data) {
+		async login(context, data) {
 			try {
 				const response = await axios.post(`${BASE_URL}/authentication`, data);
+
+				localStorage.setItem('token', response.data.data.accessToken);
+				localStorage.setItem('currentId', response.data.data.user.id);
+				localStorage.setItem(
+					'currentUsername',
+					response.data.data.user.username
+				);
+
 				return response;
 			} catch (error) {
 				return error;

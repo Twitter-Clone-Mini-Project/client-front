@@ -69,7 +69,6 @@ export default {
 			try {
 				const request = await this.$store.dispatch('login', data);
 				if (request.status === 201) {
-					localStorage.setItem('token', request.data.data.accessToken);
 					this.$router.push('/mytweet');
 				} else if (request.response.status === 401) {
 					this.loginFailed = true;

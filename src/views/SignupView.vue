@@ -12,7 +12,7 @@
 			<div v-if="loginFailed" class="bg-red-500 text-white p-2 rounded my-3">
 				{{ loginErrorMessage }}
 			</div>
-			<form @submit="login">
+			<form @submit="signup">
 				<label for="username" class="block text-base my-2">Username</label>
 				<input
 					type="text"
@@ -78,14 +78,8 @@ export default {
 		};
 	},
 	methods: {
-		async login(event) {
+		async signup(event) {
 			event.preventDefault();
-
-			// Validasi jika password dan konfirmasi password tidak cocok
-			if (this.password !== this.confirmPassword) {
-				alert('Passwords do not match.');
-				return;
-			}
 
 			this.loading = true;
 			const data = {
@@ -93,14 +87,14 @@ export default {
 				password: this.password,
 				confirmPassword: this.confirmPassword,
 			};
-
 			try {
-				const request = await this.$store.dispatch('login', data);
-				if (request.status === 200) {
-					this.$router.push('/mytweet').then(() => {
-						window.location.reload();
-					});
-				} else if (request.response.status === 400) {
+				const request = await this.$store.dispatch('signup', data);
+				if (request.status === 201) {
+					this.$router.push('/login');
+				} else if (
+					request.response.status === 401 ||
+					request.response.status === 400
+				) {
 					this.loginFailed = true;
 					this.loginErrorMessage = request.response.data.message;
 				}

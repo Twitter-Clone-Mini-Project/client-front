@@ -16,47 +16,38 @@ const routes = [
 		name: 'home',
 		component: HomeView,
 	},
+	{
+		path: '/login',
+		name: 'login',
+		component: LoginView,
+		meta: { requiresGuest: true },
+	},
+	{
+		path: '/signup',
+		name: 'signup',
+		component: SignupView,
+		meta: { requiresGuest: true },
+	},
 
 	// TODO: Uncomment baris kode dibawah ini untuk menambahkan routing baru ke Halaman Hello
 	{
 		path: '/mytweet',
 		name: 'mytweet',
 		component: MyTweetView,
+		meta: { requiresAuth: true },
 	},
 	{
 		path: '/alltweet',
 		name: 'alltweet',
 		component: AllTweetView,
+		meta: { requiresAuth: true },
 	},
 	{
 		path: '/:username/comment/:id',
 		name: 'comment',
 		component: CommentView,
 		props: true,
-	},
-	{
-		path: '/login',
-		name: 'login',
-		component: LoginView,
-		beforeEnter: (to, from, next) => {
-			if (localStorage.getItem('isLoggedIn') === 'true') {
-				next('/mytweet');
-			} else {
-				next();
-			}
-		},
-	},
-	{
-		path: '/signup',
-		name: 'signup',
-		component: SignupView,
-		beforeEnter: (to, from, next) => {
-			if (localStorage.getItem('isLoggedIn') === 'true') {
-				next('/mytweet');
-			} else {
-				next();
-			}
-		},
+		meta: { requiresAuth: true },
 	},
 ];
 
@@ -64,6 +55,26 @@ const router = new VueRouter({
 	mode: 'history',
 	base: process.env.BASE_URL,
 	routes,
+});
+
+router.beforeEach((to, from, next) => {
+	const isAuthenticated = localStorage.getItem('token');
+
+	if (to.matched.some((route) => route.meta.requiresAuth)) {
+		if (!isAuthenticated) {
+			next({ path: '/login' });
+		} else {
+			next();
+		}
+	} else if (to.matched.some((route) => route.meta.requiresGuest)) {
+		if (isAuthenticated) {
+			next({ path: '/mytweet' });
+		} else {
+			next();
+		}
+	} else {
+		next();
+	}
 });
 
 export default router;

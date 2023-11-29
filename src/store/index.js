@@ -11,17 +11,20 @@ export default new Vuex.Store({
 	getters: {},
 	mutations: {},
 	actions: {
-		async signup(context, data) {
+		async signup(context, payload) {
 			try {
-				const response = await axios.post(`${BASE_URL}/users`, data);
+				const response = await axios.post(`${BASE_URL}/users`, payload);
 				return response;
 			} catch (error) {
 				return error;
 			}
 		},
-		async login(context, data) {
+		async login(context, payload) {
 			try {
-				const response = await axios.post(`${BASE_URL}/authentication`, data);
+				const response = await axios.post(
+					`${BASE_URL}/authentication`,
+					payload
+				);
 
 				localStorage.setItem('token', response.data.data.accessToken);
 				localStorage.setItem('currentId', response.data.data.user.id);

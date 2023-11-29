@@ -62,12 +62,12 @@ export default {
 		async login(event) {
 			event.preventDefault();
 			this.loading = true;
-			const data = {
+			const payload = {
 				username: this.username,
 				password: this.password,
 			};
 			try {
-				const request = await this.$store.dispatch('login', data);
+				const request = await this.$store.dispatch('login', payload);
 				if (request.status === 201) {
 					this.$router.push('/mytweet');
 				} else if (request.response.status === 401) {

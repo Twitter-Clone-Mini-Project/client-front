@@ -1,6 +1,5 @@
 <template>
 	<div id="app">
-		<!-- aku mau NavBar ini munculnya ketika bukan url : / -->
 		<NavBar v-if="isNotHomeRoute" />
 		<router-view />
 	</div>
@@ -15,7 +14,11 @@ export default {
 	},
 	computed: {
 		isNotHomeRoute() {
-			return this.$route.path !== '/';
+			return !(
+				this.$route.path === '/' ||
+				this.$route.path === '/login' ||
+				this.$route.path === '/signup'
+			);
 		},
 	},
 };

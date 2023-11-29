@@ -62,20 +62,13 @@ export default {
 		async login(event) {
 			event.preventDefault();
 			this.loading = true;
-			const data = {
+			const payload = {
 				username: this.username,
 				password: this.password,
 			};
 			try {
-				const request = await this.$store.dispatch('login', data);
+				const request = await this.$store.dispatch('login', payload);
 				if (request.status === 201) {
-					console.log(request.data.data);
-					localStorage.setItem('token', request.data.data.accessToken);
-					localStorage.setItem(
-						'currentUsername',
-						request.data.data.user.username
-					);
-					localStorage.setItem('currentId', request.data.data.user.id);
 					this.$router.push('/mytweet');
 				} else if (request.response.status === 401) {
 					this.loginFailed = true;

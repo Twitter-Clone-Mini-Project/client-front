@@ -1,5 +1,5 @@
 <template>
-	<div class="rounded px-5 py-3 my-2 border border-inherit">
+	<div class="rounded p-5 my-2 border border-inherit">
 		<div class="flex gap-5">
 			<img
 				src="@/assets/devcode-logo.png"
@@ -11,7 +11,7 @@
 					<p>
 						<span class="font-black">{{ username }}</span>
 						<span class="text-gray-400"
-							>@{{ username.replace(/\s/g, '') }}{{ id }}</span
+							>@{{ username.replace(/\s/g, '') }}{{ userId }}</span
 						>
 					</p>
 				</div>
@@ -47,7 +47,7 @@
 <script>
 export default {
 	props: {
-		id: Number,
+		userId: Number,
 		username: String,
 	},
 	data() {
@@ -60,16 +60,20 @@ export default {
 		async addMyTweet(event) {
 			event.preventDefault();
 			this.loading = true; // Set loading state
-			const data = {
-				id: this.id,
+			const payload = {
+				userId: this.userId,
 				content: this.tweet,
 			};
 			try {
-				await this.$store.dispatch('addMyTweet', data);
+				await this.$store.dispatch('addMyTweet', payload);
 			} finally {
 				this.loading = false;
-				window.location.reload();
+				this.resetInputValue();
+				this.$parent.getTweet();
 			}
+		},
+		resetInputValue() {
+			this.tweet = '';
 		},
 	},
 	computed: {

@@ -21,13 +21,13 @@
 							>@{{ username.replace(/\s/g, '') }}{{ userId }}</span
 						>
 					</p>
-					<span class="text-gray-500">{{ formatTimeAgo(created_at) }}</span>
+					<span class="text-gray-500">{{ formatTimeAgo(createdAt) }}</span>
 				</div>
 				<p>{{ content }}</p>
 			</div>
 		</div>
 		<div class="flex justify-between">
-			<p class="text-gray-500">{{ formatCreatedAt(created_at) }}</p>
+			<p class="text-gray-500">{{ formatCreatedAt(createdAt) }}</p>
 			<div class="action flex justify-end gap-5">
 				<a href="#" class="hover:text-gray-500">
 					<font-awesome-icon icon="far fa-comment" /> Comment (0)</a
@@ -51,7 +51,7 @@ export default {
 		username: String,
 		content: String,
 		likes: Number,
-		created_at: String,
+		createdAt: String,
 	},
 	methods: {
 		// TODO: Buat codingan mengenai fungsi waktu time ago post
@@ -73,7 +73,7 @@ export default {
 			}
 		},
 
-		// TODO: Buat fungsi format dari created_at menjadi (dd MMMM yyyy)
+		// TODO: Buat fungsi format dari createdAt menjadi (dd MMMM yyyy)
 		formatCreatedAt(dateTime) {
 			return format(new Date(dateTime), 'dd MMMM yyyy');
 		},

@@ -1,68 +1,67 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-// import axios from 'axios';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
-// const BASE_URL = 'http://localhost:8080';
+const BASE_URL = 'https://gnqpdlmd-3030.asse.devtunnels.ms';
 
 export default new Vuex.Store({
-	state: {
-		isLoggedIn: false,
-		users: [],
-	},
-	getters: {
-		currentUser: (state) =>
-			state.users.find((user) => user.id === state.currentUserId),
-	},
-	mutations: {
-		setIsLoggedIn(state, status) {
-			state.isLoggedIn = status;
-		},
-		addUser(state, user) {
-			state.users.push(user); // Mutasi untuk menambahkan pengguna baru
-		},
-	},
+	state: {},
+	getters: {},
+	mutations: {},
 	actions: {
-		async getAllTweet() {
-			// return await axios.get(`${BASE_URL}/tweets`).catch((error) => {
-			// 	return error;
-			// });
-			return new Promise((resolve) => {
-				const responseData = [
-					{
-						id: 1,
-						content:
-							'Jangan pernah membicarakan kejelekan yang dimiliki oleh orang lain. Karena sesungguhnya orang yang membicarakan itulah yang menjadi orang jelek.',
-						likes: 0,
-						user_id: 1,
-						created_at: '2023-10-03T02:12:40.000Z',
-						updated_at: '2023-10-03T02:12:40.000Z',
-						username: 'tengkurizki',
+		async signup(context, payload) {
+			try {
+				const response = await axios.post(`${BASE_URL}/users`, payload);
+				return response;
+			} catch (error) {
+				return error;
+			}
+		},
+		async login(context, payload) {
+			try {
+				const response = await axios.post(
+					`${BASE_URL}/authentication`,
+					payload
+				);
+
+				localStorage.setItem('token', response.data.data.accessToken);
+				localStorage.setItem('currentId', response.data.data.user.id);
+				localStorage.setItem(
+					'currentUsername',
+					response.data.data.user.username
+				);
+
+				return response;
+			} catch (error) {
+				return error;
+			}
+		},
+		async addMyTweet(context, payload) {
+			try {
+				const response = await axios.post(`${BASE_URL}/tweets`, payload, {
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+						'Content-Type': 'application/json',
 					},
-					{
-						id: 2,
-						content:
-							'Beberapa orang masuk ke kehidupan kita dan meninggalkan jejak di hati. Sementara yang lain, masuk ke kehidupan kita dan membuat kita ingin meninggalkan jejak di muka mereka.',
-						likes: 0,
-						user_id: 2,
-						created_at: '2023-11-08T02:12:40.000Z',
-						updated_at: '2023-11-08T02:12:40.000Z',
-						username: 'jamaluddin',
+				});
+				return response;
+			} catch (error) {
+				return error;
+			}
+		},
+		async getTweet() {
+			try {
+				const response = await axios.get(`${BASE_URL}/tweets`, {
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
 					},
-					{
-						id: 3,
-						content:
-							'Agar silahturahmi terjalin dengan lancar, apakah aku boleh minjam seratus?',
-						likes: 8,
-						user_id: 1,
-						created_at: '2023-11-08T02:12:40.000Z',
-						updated_at: '2023-11-08T02:12:40.000Z',
-						username: 'tengkurizki',
-					},
-				];
-				resolve(responseData);
-			});
+				});
+				return response;
+			} catch (error) {
+				return error;
+			}
 		},
 	},
 	modules: {},

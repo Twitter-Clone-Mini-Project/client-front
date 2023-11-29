@@ -1,16 +1,7 @@
 <template>
 	<div id="app">
-		<!-- aku mau NavBar ini munculnya ketika bukan url : / -->
-		<NavBar
-			v-if="isNotHomeRoute"
-			:isLoggedIn="isLoggedIn"
-			:currentUsername="currentUsername"
-		/>
-		<router-view
-			:isLoggedIn="isLoggedIn"
-			:currentId="currentId"
-			:currentUsername="currentUsername"
-		/>
+		<NavBar v-if="isNotHomeRoute" />
+		<router-view />
 	</div>
 </template>
 <script>
@@ -23,16 +14,11 @@ export default {
 	},
 	computed: {
 		isNotHomeRoute() {
-			return this.$route.path !== '/';
-		},
-		isLoggedIn() {
-			return localStorage.getItem('isLoggedIn') === 'true' || false;
-		},
-		currentId() {
-			return parseInt(localStorage.getItem('currentId')) || 0;
-		},
-		currentUsername() {
-			return localStorage.getItem('currentUsername') || '';
+			return !(
+				this.$route.path === '/' ||
+				this.$route.path === '/login' ||
+				this.$route.path === '/signup'
+			);
 		},
 	},
 };

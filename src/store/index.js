@@ -47,7 +47,7 @@ export default new Vuex.Store({
 				return error;
 			}
 		},
-		async addMyTweet(context, payload) {
+		async addTweet(context, payload) {
 			try {
 				const response = await axios.post(`${BASE_URL}/tweets`, payload, {
 					headers: {
@@ -67,6 +67,37 @@ export default new Vuex.Store({
 						Authorization: `Bearer ${localStorage.getItem('token')}`,
 					},
 				});
+				return response;
+			} catch (error) {
+				return error;
+			}
+		},
+		async deleteTweet(context, id) {
+			try {
+				const response = await axios.delete(`${BASE_URL}/tweets/${id}`, {
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+						'Content-Type': 'application/json',
+					},
+				});
+				return response;
+			} catch (error) {
+				console.error('Delete Tweet Error:', error.response || error);
+				return error;
+			}
+		},
+		async updateTweet(context, payload) {
+			try {
+				const response = await axios.patch(
+					`${BASE_URL}/tweets/${payload.id}`,
+					payload,
+					{
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem('token')}`,
+							'Content-Type': 'application/json',
+						},
+					}
+				);
 				return response;
 			} catch (error) {
 				return error;

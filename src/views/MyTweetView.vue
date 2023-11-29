@@ -5,7 +5,7 @@
 			<MyTweet
 				v-for="tweet in sortedTweets"
 				:key="tweet.id"
-				:id="tweet.userId"
+				:id="tweet.id"
 				:userId="tweet.userId"
 				:username="tweet.username"
 				:content="tweet.content"

@@ -3,17 +3,7 @@
 		<div class="flex justify-between px-10 py-3 items-center">
 			<div class="flex items-center gap-3">
 				<img
-					v-if="isLoggedIn"
 					src="@/assets/devcode-logo.png"
-					class="mx-auto rounded-full"
-					alt="Vite logo"
-					width="50"
-					height="50"
-				/>
-				<!-- <p v-if="isLoggedIn" class="text-lg">{{ currentUser.username }}</p> -->
-				<img
-					v-else
-					src="@/assets/deffault.png"
 					class="mx-auto rounded-full"
 					alt="Vite logo"
 					width="50"
@@ -30,18 +20,11 @@
 			</div>
 			<div>
 				<button
-					v-if="isLoggedIn"
 					@click="logout"
 					class="bg-red-500 px-3 py-2 text-white rounded hover:bg-red-400"
 				>
 					Logout
 				</button>
-				<router-link
-					v-else
-					to="/login"
-					class="bg-blue-500 px-5 py-3 text-white rounded hover:bg-blue-400"
-					>Login
-				</router-link>
 			</div>
 		</div>
 		<hr />
@@ -68,16 +51,10 @@
 
 <script>
 export default {
-	props: {
-		isLoggedIn: Boolean,
-		currentUsername: String,
-	},
 	methods: {
 		logout() {
 			localStorage.clear();
-			this.$router.push('/login').then(() => {
-				window.location.reload();
-			});
+			this.$router.push('/login');
 		},
 	},
 };

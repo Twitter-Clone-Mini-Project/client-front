@@ -65,12 +65,9 @@
 		<div class="flex justify-between">
 			<p class="text-gray-500">{{ formatCreatedAt(createdAt) }}</p>
 			<div class="action flex justify-end gap-5">
-				<router-link
-					:to="`${username}${userId}/comment/${id}`"
-					class="hover:text-gray-500"
-				>
+				<a href="#" class="hover:text-gray-500">
 					<font-awesome-icon icon="far fa-comment" /> Comment (0)
-				</router-link>
+				</a>
 				<a href="#" class="hover:text-gray-500"
 					><font-awesome-icon icon="far fa-heart" /> Love ({{ likes }})
 				</a>

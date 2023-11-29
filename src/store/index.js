@@ -38,7 +38,7 @@ export default new Vuex.Store({
 				return error;
 			}
 		},
-		async addMyTweet(context, payload) {
+		async addTweet(context, payload) {
 			try {
 				const response = await axios.post(`${BASE_URL}/tweets`, payload, {
 					headers: {

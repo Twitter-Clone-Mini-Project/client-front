@@ -5,11 +5,11 @@
 				v-for="tweet in sortedTweets"
 				:key="tweet.id"
 				:currentId="currentId"
-				:userId="tweet.user_id"
+				:userId="tweet.userId"
 				:username="tweet.username"
 				:content="tweet.content"
 				:likes="tweet.likes"
-				:created_at="tweet.created_at"
+				:created_at="tweet.createdAt"
 			/>
 		</div>
 	</div>
@@ -19,14 +19,13 @@
 import AllTweet from '@/components/AllTweet.vue';
 
 export default {
-	props: {
-	currentId:Number
-},
 	components: {
 		AllTweet,
 	},
 	data() {
 		return {
+			currentId: parseInt(localStorage.getItem('currentId')),
+			currentUsername: localStorage.getItem('currentUsername'),
 			tweetsData: [],
 		};
 	},
@@ -34,23 +33,17 @@ export default {
 		sortedTweets() {
 			return this.tweetsData
 				.slice()
-				.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+				.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 		},
 	},
 	mounted() {
-		this.getAllTweet();
+		this.getTweet();
 	},
 	methods: {
-		async getAllTweet() {
-			const response = await this.$store.dispatch('getAllTweet');
+		async getTweet() {
+			const response = await this.$store.dispatch('getTweet');
 			this.tweetsData = response.data;
 		},
 	},
 };
 </script>
-
-<style>
-.content {
-	max-width: 920px;
-}
-</style>

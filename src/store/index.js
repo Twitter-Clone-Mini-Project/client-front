@@ -4,7 +4,7 @@ import axios from 'axios';
 
 Vue.use(Vuex);
 
-const BASE_URL = 'https://gnqpdlmd-3030.asse.devtunnels.ms';
+const BASE_URL = 'https://d0hfdcdg-3030.asse.devtunnels.ms';
 
 export default new Vuex.Store({
 	state: {},

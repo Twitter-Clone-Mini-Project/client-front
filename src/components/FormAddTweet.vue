@@ -15,7 +15,7 @@
 						>
 					</p>
 				</div>
-				<form @submit="addMyTweet">
+				<form @submit="addTweet">
 					<textarea
 						v-model="tweet"
 						class="w-full mt-2 p-2 border border-gray-300 rounded-md resize-none block"
@@ -57,7 +57,7 @@ export default {
 		};
 	},
 	methods: {
-		async addMyTweet(event) {
+		async addTweet(event) {
 			event.preventDefault();
 			this.loading = true; // Set loading state
 			const payload = {
@@ -65,15 +65,12 @@ export default {
 				content: this.tweet,
 			};
 			try {
-				await this.$store.dispatch('addMyTweet', payload);
+				await this.$store.dispatch('addTweet', payload);
 			} finally {
 				this.loading = false;
-				this.resetInputValue();
+				this.tweet = '';
 				this.$parent.getTweet();
 			}
-		},
-		resetInputValue() {
-			this.tweet = '';
 		},
 	},
 	computed: {

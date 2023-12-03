@@ -1,12 +1,11 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import MyTweetView from '../views/MyTweetView.vue';
-import AllTweetView from '../views/AllTweetView.vue';
+import HomeView from '../views/HomeView.vue';
 import LoginView from '../views/LoginView.vue';
 import SignupView from '../views/SignupView.vue';
-import HomeView from '../views/HomeView.vue';
+import MyTweetView from '../views/MyTweetView.vue';
+import AllTweetView from '../views/AllTweetView.vue';
 import CommentView from '../views/CommentView.vue';
-// TODO: Uncomment baris kode dibawah ini untuk meng-import Halaman Hello ke dalam router
 
 Vue.use(VueRouter);
 
@@ -28,8 +27,6 @@ const routes = [
 		component: SignupView,
 		meta: { requiresGuest: true },
 	},
-
-	// TODO: Uncomment baris kode dibawah ini untuk menambahkan routing baru ke Halaman Hello
 	{
 		path: '/mytweet',
 		name: 'mytweet',
@@ -43,7 +40,7 @@ const routes = [
 		meta: { requiresAuth: true },
 	},
 	{
-		path: '/:username/comment/:id',
+		path: '/tweets/:id/comments',
 		name: 'comment',
 		component: CommentView,
 		props: true,

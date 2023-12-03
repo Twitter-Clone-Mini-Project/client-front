@@ -18,7 +18,7 @@
 						<button
 							:disabled="tweet.trim() === '' || loading"
 							v-if="editMode"
-							@click="updateMyTweet"
+							@click="updateTweet"
 							class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400 disabled:opacity-75"
 						>
 							{{ loading ? 'Loading...' : 'Save' }}
@@ -35,7 +35,7 @@
 						</button>
 						<button
 							v-if="!editMode"
-							@click="deleteMyTweet"
+							@click="deleteTweet"
 							class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-400"
 						>
 							Delete
@@ -43,7 +43,7 @@
 					</div>
 				</div>
 				<p v-if="!editMode">{{ content }}</p>
-				<form v-if="editMode" @submit="updateMyTweet">
+				<form v-if="editMode" @submit="updateTweet">
 					<textarea
 						v-model="tweet"
 						class="w-full mt-2 p-2 border border-gray-300 rounded-md resize-none block"
@@ -65,15 +65,29 @@
 		<div class="flex justify-between">
 			<p class="text-gray-500">{{ formatCreatedAt(createdAt) }}</p>
 			<div class="action flex justify-end gap-5">
-				<router-link
-					:to="`${username}${userId}/comment/${id}`"
+				<router-link :to="`/tweets/${id}/comments`" class="hover:text-gray-500">
+					<font-awesome-icon icon="far fa-comment" /> Comment ({{
+						comments.length
+					}})</router-link
+				>
+				<button
+					v-if="isLiked"
+					type="button"
+					@click="deleteLike"
 					class="hover:text-gray-500"
 				>
-					<font-awesome-icon icon="far fa-comment" /> Comment (0)
-				</router-link>
-				<a href="#" class="hover:text-gray-500"
-					><font-awesome-icon icon="far fa-heart" /> Love ({{ likes }})
-				</a>
+					<font-awesome-icon icon="fa-solid fa-heart" /> Love ({{
+						likes.length
+					}})
+				</button>
+				<button
+					v-else
+					type="button"
+					@click="addLike"
+					class="hover:text-gray-500"
+				>
+					<font-awesome-icon icon="far fa-heart" /> Love ({{ likes.length }})
+				</button>
 			</div>
 		</div>
 	</div>
@@ -89,7 +103,6 @@ export default {
 		userId: Number,
 		username: String,
 		content: String,
-		likes: Number,
 		createdAt: String,
 	},
 	data() {
@@ -97,7 +110,15 @@ export default {
 			editMode: false,
 			tweet: '',
 			loading: false,
+			comments: [],
+			likes: [],
+			isLiked: false,
+			currentLikeId: null,
 		};
+	},
+	mounted() {
+		this.getComment();
+		this.getLike();
 	},
 	methods: {
 		// TODO: Buat codingan mengenai fungsi waktu time ago post
@@ -124,17 +145,13 @@ export default {
 			return format(new Date(dateTime), 'dd MMMM yyyy');
 		},
 
-		async deleteMyTweet() {
+		async deleteTweet() {
 			const confirmation = confirm(
 				'Are you sure you want to delete this tweet?'
 			);
 			if (confirmation) {
-				const data = {
-					id: this.id,
-					userId: this.userId,
-				};
-				await this.$store.dispatch('deleteMyTweet', data);
-				this.$parent.getMyTweet();
+				await this.$store.dispatch('deleteTweet', this.id);
+				this.$parent.getTweet();
 			}
 		},
 
@@ -145,21 +162,52 @@ export default {
 			}
 		},
 
-		async updateMyTweet(event) {
+		async updateTweet(event) {
 			event.preventDefault();
 			this.loading = true; // Set loading state
-			const data = {
-				id: this.id,
-				userId: this.userId,
-				content: this.tweet,
-			};
 			try {
-				await this.$store.dispatch('updateMyTweet', data);
+				const payload = {
+					id: this.id,
+					content: this.tweet,
+				};
+				await this.$store.dispatch('updateTweet', payload);
 			} finally {
 				this.loading = false;
 				this.toggleEditMode();
-				this.$parent.getMyTweet();
+				this.$parent.getTweet();
 			}
+		},
+
+		async getComment() {
+			const response = await this.$store.dispatch('getComment', this.id);
+			this.likes = response.data.data;
+		},
+		async getLike() {
+			const response = await this.$store.dispatch('getLike', this.id);
+			this.likes = response.data.data;
+			const foundLike = this.likes.find(
+				(like) => like.userId === this.userId && like.tweetId === this.id
+			);
+
+			if (foundLike) {
+				this.isLiked = true;
+				this.currentLikeId = foundLike.id;
+			} else {
+				this.isLiked = false;
+				this.currentLikeId = null;
+			}
+		},
+		async addLike() {
+			await this.$store.dispatch('addLike', this.id);
+			this.getLike();
+		},
+		async deleteLike() {
+			const payload = {
+				tweetId: this.id,
+				likeId: this.currentLikeId,
+			};
+			await this.$store.dispatch('deleteLike', payload);
+			this.getLike();
 		},
 	},
 	computed: {

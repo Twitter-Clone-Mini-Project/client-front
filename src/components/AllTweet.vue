@@ -29,12 +29,29 @@
 		<div class="flex justify-between">
 			<p class="text-gray-500">{{ formatCreatedAt(createdAt) }}</p>
 			<div class="action flex justify-end gap-5">
-				<a href="#" class="hover:text-gray-500">
-					<font-awesome-icon icon="far fa-comment" /> Comment (0)</a
+				<router-link :to="`/tweets/${id}/comments`" class="hover:text-gray-500">
+					<font-awesome-icon icon="far fa-comment" /> Comment ({{
+						comments.length
+					}})</router-link
 				>
-				<a href="#" class="hover:text-gray-500"
-					><font-awesome-icon icon="far fa-heart" /> Love ({{ likes }})
-				</a>
+				<button
+					v-if="isLiked"
+					type="button"
+					@click="deleteLike"
+					class="hover:text-gray-500"
+				>
+					<font-awesome-icon icon="fa-solid fa-heart" /> Love ({{
+						likes.length
+					}})
+				</button>
+				<button
+					v-else
+					type="button"
+					@click="addLike"
+					class="hover:text-gray-500"
+				>
+					<font-awesome-icon icon="far fa-heart" /> Love ({{ likes.length }})
+				</button>
 			</div>
 		</div>
 	</div>
@@ -46,12 +63,24 @@ import { format } from 'date-fns';
 
 export default {
 	props: {
+		id: Number,
 		currentId: Number,
 		userId: Number,
 		username: String,
 		content: String,
-		likes: Number,
 		createdAt: String,
+	},
+	data() {
+		return {
+			comments: [],
+			likes: [],
+			isLiked: false,
+			currentLikeId: null,
+		};
+	},
+	mounted() {
+		this.getComment();
+		this.getLike();
 	},
 	methods: {
 		// TODO: Buat codingan mengenai fungsi waktu time ago post
@@ -76,6 +105,37 @@ export default {
 		// TODO: Buat fungsi format dari createdAt menjadi (dd MMMM yyyy)
 		formatCreatedAt(dateTime) {
 			return format(new Date(dateTime), 'dd MMMM yyyy');
+		},
+		async getComment() {
+			const response = await this.$store.dispatch('getComment', this.id);
+			this.comments = response.data.data;
+		},
+		async getLike() {
+			const response = await this.$store.dispatch('getLike', this.id);
+			this.likes = response.data.data;
+			const foundLike = this.likes.find(
+				(like) => like.userId === this.currentId && like.tweetId === this.id
+			);
+
+			if (foundLike) {
+				this.isLiked = true;
+				this.currentLikeId = foundLike.id;
+			} else {
+				this.isLiked = false;
+				this.currentLikeId = null;
+			}
+		},
+		async addLike() {
+			await this.$store.dispatch('addLike', this.id);
+			this.getLike();
+		},
+		async deleteLike() {
+			const payload = {
+				tweetId: this.id,
+				likeId: this.currentLikeId,
+			};
+			await this.$store.dispatch('deleteLike', payload);
+			this.getLike();
 		},
 	},
 };

@@ -1,5 +1,5 @@
 <template>
-	<div class="rounded p-5 my-2 border border-inherit">
+	<div class="rounded px-5 py-3 my-2 border border-inherit">
 		<div class="flex gap-5">
 			<img
 				src="@/assets/devcode-logo.png"
@@ -11,11 +11,11 @@
 					<p>
 						<span class="font-black">{{ username }}</span>
 						<span class="text-gray-400"
-							>@{{ username.replace(/\s/g, '') }}{{ id }}</span
+							>@{{ username.replace(/\s/g, '') }}{{ userId }}</span
 						>
 					</p>
 				</div>
-				<form @submit="addMyTweet">
+				<form @submit="addTweet">
 					<textarea
 						v-model="tweet"
 						class="w-full mt-2 p-2 border border-gray-300 rounded-md resize-none block"
@@ -47,7 +47,7 @@
 <script>
 export default {
 	props: {
-		id: Number,
+		userId: Number,
 		username: String,
 	},
 	data() {
@@ -57,23 +57,19 @@ export default {
 		};
 	},
 	methods: {
-		async addMyTweet(event) {
+		async addTweet(event) {
 			event.preventDefault();
 			this.loading = true; // Set loading state
-			const data = {
-				id: this.id,
+			const payload = {
 				content: this.tweet,
 			};
 			try {
-				await this.$store.dispatch('addMyTweet', data);
+				await this.$store.dispatch('addTweet', payload);
 			} finally {
 				this.loading = false;
-				this.resetInputValue();
-				this.$parent.getMyTweet();
+				this.tweet = '';
+				this.$parent.getTweet();
 			}
-		},
-		resetInputValue() {
-			this.tweet = '';
 		},
 	},
 	computed: {

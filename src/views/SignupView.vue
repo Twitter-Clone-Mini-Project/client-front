@@ -82,13 +82,13 @@ export default {
 			event.preventDefault();
 
 			this.loading = true;
-			const data = {
+			const payload = {
 				username: this.username,
 				password: this.password,
 				confirmPassword: this.confirmPassword,
 			};
 			try {
-				const request = await this.$store.dispatch('signup', data);
+				const request = await this.$store.dispatch('signup', payload);
 				if (request.status === 201) {
 					this.$router.push('/login');
 				} else if (

@@ -2,6 +2,13 @@
 	<div class="rounded p-5 my-2 border border-inherit w-full">
 		<div class="flex gap-5 pb-5">
 			<img
+				v-if="currentId !== userId"
+				:src="`https://source.unsplash.com/random/200x200?sig=${userId}`"
+				alt="profile"
+				class="rounded-full w-14 h-14"
+			/>
+			<img
+				v-else
 				src="@/assets/devcode-logo.png"
 				alt="profile"
 				class="rounded-full w-14 h-14"
@@ -9,9 +16,11 @@
 			<div class="w-full">
 				<div class="flex justify-between items-center">
 					<div>
-						<p class="font-black">{{ username }}</p>
-						<p class="text-gray-400">
-							@{{ username.replace(/\s/g, '') }}{{ userId }}
+						<p>
+							<span class="font-black">{{ username }}</span>
+							<span class="text-gray-400"
+								>@{{ username.replace(/\s/g, '') }}{{ userId }}</span
+							>
 						</p>
 					</div>
 					<span class="text-gray-500">{{ formatTimeAgo(createdAt) }}</span>
@@ -22,12 +31,27 @@
 		<div class="flex justify-between">
 			<p class="text-gray-500">{{ formatCreatedAt(createdAt) }}</p>
 			<div class="action flex justify-end gap-5">
-				<a href="#" class="hover:text-gray-500">
-					<font-awesome-icon icon="far fa-heart" /> Love ({{ likes }})
-				</a>
+				<button
+					v-if="isLiked"
+					type="button"
+					@click="deleteLike"
+					class="hover:text-gray-500"
+				>
+					<font-awesome-icon icon="fa-solid fa-heart" /> Love ({{
+						likes.length
+					}})
+				</button>
+				<button
+					v-else
+					type="button"
+					@click="addLike"
+					class="hover:text-gray-500"
+				>
+					<font-awesome-icon icon="far fa-heart" /> Love ({{ likes.length }})
+				</button>
 			</div>
 		</div>
-		<form @submit.prevent="postComment">
+		<form @submit.prevent="addComment">
 			<textarea
 				v-model="newComment"
 				class="w-full p-2 border border-gray-300 rounded-md resize-none block mb-2 mt-4"
@@ -59,21 +83,24 @@ import { format } from 'date-fns';
 
 export default {
 	props: {
+		id: Number,
 		currentId: Number,
 		userId: Number,
 		username: String,
 		content: String,
-		likes: Number,
 		createdAt: String,
 	},
 	data() {
 		return {
 			newComment: '',
 			loading: false,
+			likes: [],
+			isLiked: false,
+			currentLikeId: null,
 		};
 	},
 	mounted() {
-		this.getCommentTweet();
+		this.getLike();
 	},
 	methods: {
 		formatTimeAgo(dateTime) {
@@ -98,43 +125,51 @@ export default {
 			return format(new Date(dateTime), 'dd MMMM yyyy');
 		},
 
-		async getCommentTweet() {
-			if (this.currentId) {
-				this.loading = true;
-				try {
-					const response = await this.$store.dispatch(
-						'getCommentTweet',
-						this.currentId
-					);
-					this.tweetsData = response.data;
-				} finally {
-					this.loading = false;
-				}
-			}
-		},
-
-		async postComment() {
-			if (
-				this.newComment.trim() === '' ||
-				this.newComment.length > 280 ||
-				this.loading
-			) {
-				return;
-			}
-
-			const commentData = {
-				id: this.sortedTweets[0].id,
-				userId: this.sortedTweets[0].user_id,
+		async addComment() {
+			const payload = {
 				content: this.newComment,
 			};
 
 			this.loading = true;
 			try {
-				await this.$store.dispatch('postComment', commentData);
+				await this.$store.dispatch('addComment', { payload, id: this.id });
 				this.newComment = '';
 			} finally {
 				this.loading = false;
+				this.mewComment = '';
+				this.$parent.getComment();
 			}
+		},
+		async getLike() {
+			const response = await this.$store.dispatch('getLike', this.id);
+			this.likes = response.data.data;
+			const foundLike = this.likes.find(
+				(like) => like.userId === this.currentId && like.tweetId === this.id
+			);
+
+			if (foundLike) {
+				this.isLiked = true;
+				this.currentLikeId = foundLike.id;
+			} else {
+				this.isLiked = false;
+				this.currentLikeId = null;
+			}
+		},
+		async getComment() {
+			const response = await this.$store.dispatch('getComment', this.id);
+			this.comments = response.data.data;
+		},
+		async addLike() {
+			await this.$store.dispatch('addLike', this.id);
+			this.getLike();
+		},
+		async deleteLike() {
+			const payload = {
+				tweetId: this.id,
+				likeId: this.currentLikeId,
+			};
+			await this.$store.dispatch('deleteLike', payload);
+			this.getLike();
 		},
 	},
 	computed: {

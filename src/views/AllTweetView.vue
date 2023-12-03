@@ -1,6 +1,6 @@
 <template>
 	<div class="flex justify-center bg-white h-screen px-5">
-		<div class="content px-5 py-5 bg-white h-full overflow-y-auto">
+		<div class="w-full lg:w-[55%] px-5 py-5 bg-white h-full overflow-y-auto">
 			<AllTweet
 				v-for="tweet in sortedTweets"
 				:key="tweet.id"
@@ -9,7 +9,7 @@
 				:username="tweet.username"
 				:content="tweet.content"
 				:likes="tweet.likes"
-				:created_at="tweet.createdAt"
+				:createdAt="tweet.createdAt"
 			/>
 		</div>
 	</div>
@@ -42,7 +42,7 @@ export default {
 	methods: {
 		async getTweet() {
 			const response = await this.$store.dispatch('getTweet');
-			this.tweetsData = response.data;
+			this.tweetsData = response.data.data;
 		},
 	},
 };

@@ -16,9 +16,11 @@
 			<div class="w-full">
 				<div class="flex justify-between items-center">
 					<div>
-						<p class="font-black">{{ username }}</p>
-						<p class="text-gray-400">
-							@{{ username.replace(/\s/g, '') }}{{ userId }}
+						<p>
+							<span class="font-black">{{ username }}</span>
+							<span class="text-gray-400"
+								>@{{ username.replace(/\s/g, '') }}{{ userId }}</span
+							>
 						</p>
 					</div>
 					<span class="text-gray-500">{{ formatTimeAgo(createdAt) }}</span>

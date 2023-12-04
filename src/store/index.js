@@ -9,15 +9,6 @@ const BASE_URL = 'https://d0hfdcdg-3030.asse.devtunnels.ms';
 export default new Vuex.Store({
 	state: {},
 	mutations: {
-		setCurrentId(state, id) {
-			localStorage.setItem('currentId', id);
-		},
-		setCurrentUsername(state, username) {
-			localStorage.setItem('currentUsername', username);
-		},
-		setIsLoggedIn(state, status) {
-			localStorage.setItem('isLoggedIn', status);
-		},
 	},
 	actions: {
 		async signup(context, payload) {

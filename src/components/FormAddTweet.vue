@@ -67,7 +67,8 @@ export default {
 				await this.$store.dispatch('addTweet', payload);
 			} finally {
 				this.loading = false;
-				window.location.reload();
+				this.tweet = '';
+				this.$parent.getTweet();
 			}
 		},
 	},

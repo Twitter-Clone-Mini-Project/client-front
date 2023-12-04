@@ -26,7 +26,7 @@
 					<font-awesome-icon icon="far fa-comment" /> Comment (0)</a
 				>
 				<a href="#" class="hover:text-gray-500"
-					><font-awesome-icon icon="far fa-heart" /> Love ({{ likes }})
+					><font-awesome-icon icon="far fa-heart" /> Love (0)
 				</a>
 			</div>
 		</div>
@@ -43,7 +43,6 @@ export default {
 		userId: Number,
 		username: String,
 		content: String,
-		likes: Number,
 		createdAt: String,
 	},
 	methods: {

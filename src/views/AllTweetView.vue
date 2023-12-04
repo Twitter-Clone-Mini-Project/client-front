@@ -4,6 +4,7 @@
 			<AllTweet
 				v-for="tweet in sortedTweets"
 				:key="tweet.id"
+				:id="tweet.id"
 				:currentId="currentId"
 				:userId="tweet.userId"
 				:username="tweet.username"
